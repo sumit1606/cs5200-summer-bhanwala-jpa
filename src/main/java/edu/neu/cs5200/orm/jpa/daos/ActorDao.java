@@ -42,16 +42,31 @@ public class ActorDao {
 		createdAct.setOSCARNOMINATIONS(a.getOSCARNOMINATIONS());
 		createdAct.setMoviesActed(new ArrayList<Movie>());
 		createdAct = this.createActor(createdAct);
-		for(Movie m: createdAct.getMoviesActed()) {
-			Movie createdMovie = moviedao.createMovie(m); 
-			if(createdMovie.getMovieActor() == null) {
-				createdMovie.setMovieActor(new ArrayList<Actor>());
+		if(a.getMoviesActed() != null ) {
+			for(Movie m: a.getMoviesActed()) {
+				Movie createdMovie = moviedao.createMovie(m); 
+				if(createdMovie.getMovieActor() == null) {
+					createdMovie.setMovieActor(new ArrayList<Actor>());
+				}
+				if(!hasActedInMovie(createdAct,createdMovie)) {
+					moviedao.addActorToMovie(createdAct, createdMovie);
+				}
+				
 			}
-			moviedao.addActorToMovie(createdAct, createdMovie);
 		}
 		return createdAct;
 	}
 	
+	private boolean hasActedInMovie(Actor act, Movie movie) {
+		Actor actor =  findActorById(act.getId()).get();
+		for(Movie m :actor.getMoviesActed()) {
+			if(m.getTitle().equals(movie.getTitle())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public List<Actor> findAllActor() {
 		return (List<Actor>) actorRepository.findAll();
 	}

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Component;
 import edu.neu.cs5200.orm.jpa.entities.Actor;
 import edu.neu.cs5200.orm.jpa.entities.Director;
 import edu.neu.cs5200.orm.jpa.entities.Movie;
+import edu.neu.cs5200.orm.jpa.entities.MovieLibrary;
 import edu.neu.cs5200.orm.jpa.repositories.ActorRepository;
 import edu.neu.cs5200.orm.jpa.repositories.DirectorRepository;
+import edu.neu.cs5200.orm.jpa.repositories.MovieLibraryRepository;
 import edu.neu.cs5200.orm.jpa.repositories.MovieRepository;
 
 @Component
@@ -30,6 +32,12 @@ public class MovieDao {
 	
 	@Autowired
 	DirectorDao directorDao;
+	
+	@Autowired
+	MovieLibraryDao movieLibraryDao;
+	
+	@Autowired
+	MovieLibraryRepository movielibraryRepo;
 	
 	public void deleteAllMovie() {
 		List<Movie> movies = (List<Movie>) movieRepository.findAll();
@@ -154,7 +162,29 @@ public class MovieDao {
 				addDirectorToMovie(d1, m1);
 			}
 		}
+		if(m.getLibrary() != null) {
+			MovieLibrary temp  = m.getLibrary();
+			MovieLibrary created = movieLibraryDao.createMovieLibraryByName(temp.getName());
+			m1.setLibrary(created);
+			movieRepository.save(m1);
+		}
 		return this.findMovieById(m1.getId()).get();
+	}
+	
+	public Movie updateMovie(Movie m, int mid) {
+		Movie m1 = this.findMovieById(mid).get();
+		if(m1 != null) {
+			m1.setTitle(m.getTitle());
+			MovieLibrary temp = m.getLibrary();
+			if(temp != null) {
+				MovieLibrary created = movieLibraryDao.createMovieLibraryByName(temp.getName());
+				m1.setLibrary(created);
+			} else {
+				m1.setLibrary(null);
+			}
+		}
+		movieRepository.save(m1);				
+		return this.findMovieById(mid).get();
 	}
 	
 	

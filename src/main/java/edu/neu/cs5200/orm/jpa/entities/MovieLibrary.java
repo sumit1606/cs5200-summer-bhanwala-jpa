@@ -22,7 +22,7 @@ public class MovieLibrary {
 	private int id;
 	private String name;
 	
-	@OneToMany(mappedBy="library",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="library")
 	@JsonIgnore
 	private List<Movie> movies;
 	

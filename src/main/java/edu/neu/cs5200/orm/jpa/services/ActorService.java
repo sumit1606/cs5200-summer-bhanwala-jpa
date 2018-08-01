@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs5200.orm.jpa.daos.ActorDao;
+import edu.neu.cs5200.orm.jpa.daos.MovieDao;
 import edu.neu.cs5200.orm.jpa.entities.Actor;
 import edu.neu.cs5200.orm.jpa.entities.Movie;
 
@@ -21,6 +22,9 @@ public class ActorService {
 
 	@Autowired
 	ActorDao actorDao;
+	
+	@Autowired
+	MovieDao movieDao;
 	
 	@GetMapping("/api/actor")
 	public List<Actor> findAllActor() {
@@ -49,7 +53,6 @@ public class ActorService {
 	// Post when actor has movies is not working in itself
 	@PostMapping("/api/actor")
 	public Actor createActor(@RequestBody Actor actor) {
-		Actor a = actor;
 		return actorDao.processActor(actor);
 	}
 	

@@ -56,8 +56,10 @@ public class MovieLibraryDao {
 		movielibraryRepo.deleteAll();
 	}
 	
-	public void createMovieLibrary(MovieLibrary mLib) {
-		movielibraryRepo.save(mLib);
+	public MovieLibrary createMovieLibrary(MovieLibrary mLib) {
+		if(movielibraryRepo.findMovieLibraryByName(mLib.getName()) == null)
+			movielibraryRepo.save(mLib);
+		return movielibraryRepo.findMovieLibraryByName(mLib.getName()); 
 	}
 	
 	public Optional<MovieLibrary> getMovieLibraryById(int id) {
@@ -81,6 +83,13 @@ public class MovieLibraryDao {
 	public Movie processMovie(Movie m) {
 		Movie movie = m;
 		return m;
+	}
+	
+	public MovieLibrary createMovieLibraryByName(String name) {
+		// TODO Auto-generated method stub
+		MovieLibrary created = new MovieLibrary();
+		created.setName(name);
+		return this.createMovieLibrary(created);
 	}
 
 	
@@ -154,8 +163,9 @@ public class MovieLibraryDao {
             }
         }
         
-		this.deleteAllLibrary();
 	}
+
+	
 
 	
 }

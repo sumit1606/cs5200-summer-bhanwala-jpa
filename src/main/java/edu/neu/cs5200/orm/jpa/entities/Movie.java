@@ -33,7 +33,6 @@ public class Movie implements Serializable {
 	private List<Director> movieDirector;
 
 	@ManyToOne
-	@JsonIgnore
 	private MovieLibrary library;
 
 	public Movie(String title2) {
