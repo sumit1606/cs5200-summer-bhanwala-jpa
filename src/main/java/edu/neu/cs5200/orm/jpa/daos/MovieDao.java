@@ -66,7 +66,10 @@ public class MovieDao {
 	}
 	
 	public Movie createMovie(Movie m) {
-		return movieRepository.save(m);
+		if (movieRepository.findMovieByTitle(m.getTitle()) == null ) {
+			return movieRepository.save(m);
+		}
+		return movieRepository.findMovieByTitle(m.getTitle()); 
 	}
 	
 	public void deleteMovieById(int id) {
@@ -131,27 +134,25 @@ public class MovieDao {
 	
 	
 	public Movie processMovie(Movie m) {
-		Movie m1 = new Movie();
-		m1.setTitle(m.getTitle());
+		Movie m1 = new Movie(m.getTitle());
 		m1 = this.createMovie(m1);
-		if(m1.getMovieActor() == null)
-			m1.setMovieActor(new ArrayList<Actor>());
-		for(Actor a: m.getMovieActor()) {
-			Actor a1 = new Actor();
-			a1.setFirstName(a.getFirstName());
-			a1.setLastName(a.getLastName());
-			a1 = actorDao.createActor(a1);
-			addActorToMovie(a1, m1);
+		if(m.getMovieActor() !=null) {
+			for(Actor a: m.getMovieActor()) {
+				Actor a1 = new Actor();
+				a1.setFirstName(a.getFirstName());
+				a1.setLastName(a.getLastName());
+				a1 = actorDao.createActor(a1);
+				addActorToMovie(a1, m1);
+			}
 		}
-
-		if(m1.getMovieDirector() == null)
-			m1.setMovieDirector(new ArrayList<Director>());
-		for(Director d: m.getMovieDirector()) {
-			Director d1 = new Director();
-			d1.setFirstName(d.getFirstName());
-			d1.setLastName(d.getLastName());
-			d1 = directorDao.createDirector(d1);
-			addDirectorToMovie(d1, m1);
+		if(m.getMovieDirector() != null) {
+			for(Director d: m.getMovieDirector()) {
+				Director d1 = new Director();
+				d1.setFirstName(d.getFirstName());
+				d1.setLastName(d.getLastName());
+				d1 = directorDao.createDirector(d1);
+				addDirectorToMovie(d1, m1);
+			}
 		}
 		return this.findMovieById(m1.getId()).get();
 	}

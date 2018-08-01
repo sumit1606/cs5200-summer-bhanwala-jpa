@@ -29,20 +29,6 @@ public class MovieService {
 	@GetMapping("/api/movie")
 	public List<Movie> findAllMovie() {
 		List<Movie> movies = (List<Movie>) movieDao.findAllMovies();
-		for(Movie m: movies) {
-			List<Actor> thisMovieAct = m.getMovieActor();
-			List<Actor> expandedAct = new ArrayList<Actor>();
-			for(Actor a: thisMovieAct) {
-				Actor newActor = new Actor();
-				newActor.setId(a.getId());
-				newActor.setFirstName(a.getFirstName());
-				newActor.setLastName(a.getLastName());
-				newActor.setOSCARNOMINATIONS(a.getOSCARNOMINATIONS());
-				newActor.setDtype(a.getDtype());
-				expandedAct.add(newActor);
-			}
-			m.setMovieActor(expandedAct);
-		}
 		return movies;
 	}
 	

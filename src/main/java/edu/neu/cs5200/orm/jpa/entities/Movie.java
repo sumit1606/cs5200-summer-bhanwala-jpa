@@ -36,6 +36,16 @@ public class Movie implements Serializable {
 	@JsonIgnore
 	private MovieLibrary library;
 
+	public Movie(String title2) {
+		this.title = title2;
+		this.movieActor = new ArrayList<Actor>();
+		this.movieDirector =  new ArrayList<Director>();
+	}
+
+	public Movie() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}
